@@ -9,18 +9,35 @@ import {
   ScrollView,
   Dimensions,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
+
+import {auth} from '../../config/firebase';
+import {signInWithEmailAndPassword} from 'firebase/auth';
+import {useDispatch} from 'react-redux';
+import LoginSlide from './LoginSlide';
 
 export default function LoginScreen({navigation}) {
   const [username, setUsername] = useState('');
   const [pass, setPass] = useState('');
   const [error, setError] = useState('');
+  const dispatch = useDispatch();
 
   const Login = () => {
-    if (username == '001201025724' && pass == '123456') {
-      navigation.navigate('HomeScreen');
-    } else {
-      setError('Số CMND/CCCD hoặc mật khẩu không chính xác! Vui lòng thử lại!');
+    if (username != '' && pass != '') {
+      signInWithEmailAndPassword(auth, username, pass)
+        .then(authen => {
+          console.log('Login success!', authen);
+          dispatch(
+            LoginSlide.actions.addInfo({
+              email: authen.email,
+              idToken: authen.idToken,
+              displayName: authen.displayName,
+            }),
+          );
+          // navigation.navigate('HomeScreen');
+        })
+        .catch(err => Alert.alert('Login Error', err.message));
     }
   };
 
@@ -52,7 +69,7 @@ export default function LoginScreen({navigation}) {
                 borderColor: '#ccc',
               }}>
               <Image
-                source={require('../../assets/logo1.png')}
+                source={require('../../assets/chatapp_logo.png')}
                 style={styles.imgLogo}
               />
             </View>
@@ -63,9 +80,9 @@ export default function LoginScreen({navigation}) {
               style={{
                 width: 300,
               }}>
-              <Text style={{marginBottom: 4, fontSize: 16}}>Số CMND/CCCD:</Text>
+              <Text style={{marginBottom: 4, fontSize: 16}}>Email:</Text>
               <TextInput
-                placeholder="Vui lòng nhập CMND/CCCD"
+                placeholder="Vui lòng nhập Email"
                 style={styles.textInput}
                 value={username}
                 onChangeText={text => setUsername(text)}
@@ -136,24 +153,6 @@ export default function LoginScreen({navigation}) {
               </TouchableOpacity>
             </View>
           </View>
-          <View
-            style={{
-              width: Dimensions.get('window').width,
-              position: 'absolute',
-              bottom: 0,
-              height: 26,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <TouchableOpacity style={styles.btnTongDai}>
-              <Text style={styles.textTongDai}>
-                Tổng đài hỗ trợ:{' '}
-                <Text style={{color: 'red', textDecorationLine: 'underline'}}>
-                  19006888
-                </Text>
-              </Text>
-            </TouchableOpacity>
-          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -179,7 +178,7 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
   },
   btn: {
-    backgroundColor: 'red',
+    backgroundColor: '#074684',
     width: '100%',
     height: 46,
     justifyContent: 'center',
