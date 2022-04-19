@@ -37,7 +37,8 @@ const HomeScreen = () => {
   }, [navigation]);
 
   const signOut = () => {
-    signOut(auth)
+    auth
+      .signOut()
       .then(() => console.log('dang xuat thanh cong'))
       .catch(err => console.log(err));
   };

@@ -6,6 +6,7 @@ import {NativeBaseProvider} from 'native-base';
 import {Provider} from 'react-redux';
 import store from './src/redux/store';
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 import SplashScreen from './src/navigators/SplashScreens/SplashScreen';
 import LoginScreen from './src/navigators/LoginScreens/LoginScreen';
@@ -13,6 +14,7 @@ import HomeScreen from './src/navigators/HomeScreens/HomeScreen';
 import RegisterScreen from './src/navigators/RegisterScreens/RegisterScreen';
 import FogotPassScreen from './src/navigators/FogotPasswordScreens/FogotPassScreen';
 import ChatScreen from './src/navigators/ChatScreen/ChatScreen';
+import SettingScreen from './src/navigators/SettingScreen/SettingScreen';
 
 import {onAuthStateChanged} from 'firebase/auth';
 import {useDispatch, useSelector} from 'react-redux';
@@ -20,6 +22,9 @@ import {auth} from './src/config/firebase';
 import {useEffect, useState} from 'react';
 import LoginSlide from './src/navigators/LoginScreens/LoginSlide';
 import {userInformation} from './src/redux/selectors';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+
+import {Ionicons} from 'react-native-vector-icons/Ionicons';
 
 function HomeStack() {
   return (
@@ -43,6 +48,15 @@ function AuthStack() {
   );
 }
 
+const TabStack = () => {
+  return (
+    <Tab.Navigator screenOptions={{header: () => null}}>
+      <Tab.Screen name="HomeScreen" component={HomeStack} />
+      <Tab.Screen name="Setting" component={SettingScreen} />
+    </Tab.Navigator>
+  );
+};
+
 function RootNavigator() {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({});
@@ -62,7 +76,7 @@ function RootNavigator() {
       console.log('co vao', authenticatedUser);
     });
     return () => unsubscribe();
-  }, [user]);
+  }, []);
 
   if (loading) {
     return (
@@ -74,7 +88,7 @@ function RootNavigator() {
 
   return (
     <NavigationContainer>
-      {user ? <HomeStack /> : <AuthStack />}
+      {user ? <TabStack /> : <AuthStack />}
     </NavigationContainer>
   );
 }
