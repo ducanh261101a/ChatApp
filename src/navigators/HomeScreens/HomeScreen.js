@@ -1,5 +1,12 @@
 import React, {useEffect} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -7,34 +14,35 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {auth} from '../../config/firebase';
 import {signOut} from 'firebase/auth';
 
+const WIDTH = Dimensions.get('window').width;
+const HEIGHT = Dimensions.get('window').height;
+
 const HomeScreen = () => {
-  const catImageUrl =
-    'https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=1200&height=1200&quality=85&auto=format&fit=crop&s=49ed3252c0b2ffb49cf8b508892e452d';
   const navigation = useNavigation();
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <FontAwesome
-          name="search"
-          size={24}
-          color={'#C5C5C7'}
-          style={{marginLeft: 15}}
-        />
-      ),
-      headerRight: () => (
-        <TouchableOpacity
-          style={{
-            width: 40,
-            height: 40,
-            marginRight: 15,
-          }}
-          onPress={signOut}>
-          <Text>Đăng xuất</Text>
-        </TouchableOpacity>
-      ),
-    });
-  }, [navigation]);
+  // useEffect(() => {
+  //   navigation.setOptions({
+  //     headerLeft: () => (
+  //       <FontAwesome
+  //         name="search"
+  //         size={24}
+  //         color={'#C5C5C7'}
+  //         style={{marginLeft: 15}}
+  //       />
+  //     ),
+  //     headerRight: () => (
+  //       <TouchableOpacity
+  //         style={{
+  //           width: 40,
+  //           height: 40,
+  //           marginRight: 15,
+  //         }}
+  //         onPress={signOut}>
+  //         <Text>Đăng xuất</Text>
+  //       </TouchableOpacity>
+  //     ),
+  //   });
+  // }, [navigation]);
 
   const signOut = () => {
     auth
@@ -44,12 +52,34 @@ const HomeScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('ChatScreen')}
-        style={styles.chatButton}>
-        <Entypo name="chat" size={24} color={'#FAFAFA'} />
-      </TouchableOpacity>
+    <View style={{width: WIDTH, height: HEIGHT, alignItems: 'center'}}>
+      <View style={styles.header}>
+        <View style={styles.leftView}>
+          <FontAwesome
+            name="search"
+            size={24}
+            color={'#C5C5C7'}
+            style={{marginLeft: 15}}
+          />
+        </View>
+        <Text style={{fontSize: 18, fontWeight: 'bold'}}>Trang chủ</Text>
+        <TouchableOpacity onPress={signOut}>
+          <FontAwesome
+            name="sign-out"
+            size={24}
+            color={'#C5C5C7'}
+            style={{marginRight: 15}}
+          />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.container}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ChatScreen')}
+          style={styles.chatButton}>
+          <Entypo name="chat" size={24} color={'#FAFAFA'} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -58,7 +88,8 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: WIDTH,
+    height: HEIGHT - 100,
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
     backgroundColor: '#fff',
@@ -79,5 +110,12 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     marginRight: 20,
     marginBottom: 50,
+  },
+  header: {
+    width: WIDTH,
+    height: 50,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });

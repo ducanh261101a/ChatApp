@@ -30,7 +30,7 @@ export default function SplashScreen({navigation}) {
           backgroundColor: '#fff',
         }}>
         <Image
-          source={require('../../assets/logo1.png')}
+          source={require('../../assets/chatapp_logo.png')}
           style={{width: 250, height: 250}}
         />
       </View>

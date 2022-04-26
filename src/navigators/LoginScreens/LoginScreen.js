@@ -24,6 +24,21 @@ export default function LoginScreen({navigation}) {
   const dispatch = useDispatch();
 
   const Login = () => {
+    if (!username) {
+      setError('Vui lòng nhập email!');
+      return;
+    }
+
+    if (!pass) {
+      setError('Vui lòng nhập mật khẩu!');
+      return;
+    }
+
+    if (pass.length < 6) {
+      setError('Mật khẩu phải có ít nhất 6 ký tự!');
+      return;
+    }
+
     if (username != '' && pass != '') {
       signInWithEmailAndPassword(auth, username, pass)
         .then(authen => {

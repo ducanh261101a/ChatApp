@@ -25,7 +25,22 @@ const RegisterScreen = ({navigation}) => {
   const dispatch = useDispatch();
 
   const Register = () => {
-    if (username.length > 0 && pass.length > 6) {
+    if (!username) {
+      setError('Vui lòng nhập email!');
+      return;
+    }
+
+    if (!pass) {
+      setError('Vui lòng nhập mật khẩu!');
+      return;
+    }
+
+    if (pass.length < 6) {
+      setError('Mật khẩu phải có ít nhất 6 ký tự!');
+      return;
+    }
+
+    if (username.length > 0 && pass.length > 5) {
       console.log('abcd');
       createUserWithEmailAndPassword(auth, username, pass)
         .then(userCredential => {
